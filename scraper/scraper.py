@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database.db import insert_article, get_all_news
+from database.db import insert_article, get_all_news, clear_old_news
 
 NCAA_API_BASE = "https://ncaa-api.henrygd.me"
 
@@ -59,6 +59,7 @@ def run_tracker():
             print(f"  [{article['division']}] {article['title']}")
 
     # Save to database
+    clear_old_news()
     print("\n[2] Saving to database...")
     saved = 0
     for article in all_news:

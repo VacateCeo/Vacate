@@ -37,3 +37,13 @@ def get_all_players():
     except Exception as e:
         print(f"Error fetching players: {e}")
         return []
+def clear_old_news():
+    try:
+        from datetime import datetime, timedelta, timezone
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+        result = supabase.table("news").delete().lt("date_added", cutoff).execute()
+        print(f"    Cleared old news articles")
+        return result
+    except Exception as e:
+        print(f"Error clearing old news: {e}")
+        return None
