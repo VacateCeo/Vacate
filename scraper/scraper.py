@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database.db import insert_article, get_all_articles
+from database.db import insert_article, get_all_news
 
 NCAA_API_BASE = "https://ncaa-api.henrygd.me"
 
@@ -68,7 +68,7 @@ def run_tracker():
     print(f"    Saved {saved} articles to Supabase")
 
     # Check total rows
-    total = get_all_articles()
+    total = get_all_news()
     print(f"    Total rows in database: {len(total)}")
 
     # Export to CSV
