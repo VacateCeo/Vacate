@@ -3,7 +3,11 @@ import { supabase } from "./supabaseClient"
 
 export default function SubmitForm() {
   const [type, setType] = useState("transfer")
-  const [form, setForm] = useState({ name: "", school: "", position: "", division: "D2", grad_year: "", stats: "", hudl: "", email: "" })
+  const [form, setForm] = useState({
+    name: "", school: "", position: "", division: "D2",
+    grad_year: "", height: "", weight: "", wingspan: "", gpa: "",
+    stats: "", hudl: "", email: ""
+  })
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
 
@@ -14,10 +18,21 @@ export default function SubmitForm() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError("")
+    const description = [
+      "Type: " + (type === "transfer" ? "Transfer" : "Recruit"),
+      "Year: " + form.grad_year,
+      form.height && "Height: " + form.height,
+      form.weight && "Weight: " + form.weight + " lbs",
+      form.wingspan && "Wingspan: " + form.wingspan,
+      form.gpa && "GPA: " + form.gpa,
+      form.stats && "Stats: " + form.stats,
+      "Contact: " + form.email,
+    ].filter(Boolean).join(" | ")
+
     const { error } = await supabase.from("players").insert([{
       title: form.name + " | " + form.position + " | " + form.school,
       division: form.division,
-      description: "Type: " + type + " | Year: " + form.grad_year + " | Stats: " + form.stats + " | Contact: " + form.email,
+      description,
       source: type === "transfer" ? "Self-Reported Transfer" : "Self-Reported Recruit",
       url: form.hudl
     }])
@@ -35,14 +50,24 @@ export default function SubmitForm() {
   )
 
   return (
-    <div className="p-6 bg-white border-t border-b">
+    <div className="p-4 sm:p-6 bg-white border-t border-b">
       <h2 className="text-xl font-bold mb-2 text-gray-800">Submit Your Profile</h2>
       <p className="text-gray-500 text-sm mb-4">Players — list yourself so D2/D3 coaches can find you.</p>
-      <div className="flex gap-3 mb-4">
-        <button onClick={() => setType("transfer")} className={type === "transfer" ? "px-4 py-2 rounded font-semibold text-sm bg-green-700 text-white" : "px-4 py-2 rounded font-semibold text-sm bg-gray-100 text-gray-700"}>
+      <div className="flex flex-wrap gap-3 mb-4">
+        <button
+          onClick={() => setType("transfer")}
+          className={type === "transfer"
+            ? "px-4 py-2 rounded font-semibold text-sm bg-green-700 text-white"
+            : "px-4 py-2 rounded font-semibold text-sm bg-gray-100 text-gray-700"}
+        >
           Transfer Portal
         </button>
-        <button onClick={() => setType("recruit")} className={type === "recruit" ? "px-4 py-2 rounded font-semibold text-sm bg-green-700 text-white" : "px-4 py-2 rounded font-semibold text-sm bg-gray-100 text-gray-700"}>
+        <button
+          onClick={() => setType("recruit")}
+          className={type === "recruit"
+            ? "px-4 py-2 rounded font-semibold text-sm bg-green-700 text-white"
+            : "px-4 py-2 rounded font-semibold text-sm bg-gray-100 text-gray-700"}
+        >
           High School Recruit
         </button>
       </div>
@@ -62,10 +87,18 @@ export default function SubmitForm() {
           <option value="D3">Division III</option>
         </select>
         <input name="grad_year" placeholder={type === "transfer" ? "Eligibility Year (e.g. 2026)" : "Graduation Year"} onChange={handleChange} required className="border rounded px-4 py-2 text-gray-800" />
+        <div className="grid grid-cols-2 gap-3">
+          <input name="height" placeholder='Height (e.g. 6&apos;4")' onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
+          <input name="weight" placeholder="Weight (lbs)" onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <input name="wingspan" placeholder='Wingspan (e.g. 6&apos;7")' onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
+          <input name="gpa" placeholder="GPA (optional)" onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
+        </div>
         <input name="stats" placeholder="Key Stats (e.g. 14 PPG, 6 RPG)" onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
         <input name="hudl" placeholder="Hudl or highlight link (optional)" onChange={handleChange} className="border rounded px-4 py-2 text-gray-800" />
         <input name="email" type="email" placeholder="Your email (coaches will contact you)" onChange={handleChange} required className="border rounded px-4 py-2 text-gray-800" />
-        <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded font-semibold hover:bg-green-800">
+        <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded font-semibold hover:bg-green-800 w-full">
           Submit Profile
         </button>
         {error && <p className="text-red-500 text-sm">{error}</p>}

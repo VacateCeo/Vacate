@@ -12,13 +12,14 @@ load_dotenv()
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from database.db import insert_article, get_all_news, clear_old_news
+from notify import notify_new_players
 
 NCAA_API_BASE = "https://ncaa-api.henrygd.me"
 
 def get_ncaa_transfer_news(division="d2"):
     url = f"{NCAA_API_BASE}/news/basketball-men/{division}"
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=30)
         response.raise_for_status()
         data = response.json()
         articles = data.get("items", [])
@@ -59,9 +60,10 @@ def run_tracker():
             print(f"  [{article['division']}] {article['title']}")
 
     # Save to database
-    clear_old_news()
     print("\n[2] Saving to database...")
     saved = 0
+    if all_news:
+        clear_old_news()
     for article in all_news:
         result = insert_article(article)
         if result:
@@ -77,6 +79,9 @@ def run_tracker():
         df_news = pd.DataFrame(all_news)
         df_news.to_csv("ncaa_transfer_news.csv", index=False)
         print(f"\n[3] Saved {len(all_news)} articles to ncaa_transfer_news.csv")
+
+    # Notify admin of new player submissions
+    notify_new_players()
 
     print("\nDone.")
 
