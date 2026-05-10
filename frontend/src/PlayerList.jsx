@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { supabase } from "./supabaseClient"
 
 const POSITIONS = ["All", "PG", "SG", "SF", "PF", "C"]
@@ -26,6 +27,7 @@ export default function PlayerList() {
   const [loading, setLoading] = useState(true)
   const [positionFilter, setPositionFilter] = useState("All")
   const [divisionFilter, setDivisionFilter] = useState("All")
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchData() {
@@ -97,7 +99,11 @@ export default function PlayerList() {
             {/* Mobile: card view */}
             <div className="md:hidden space-y-3">
               {filteredPlayers.map(player => (
-                <div key={player.id} className="bg-white rounded-lg shadow p-4">
+                <div
+                  key={player.id}
+                  onClick={() => navigate(`/player/${player.id}`)}
+                  className="bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-md transition-shadow"
+                >
                   <div className="font-semibold text-gray-800 text-sm leading-snug">{player.title}</div>
                   <div className="flex flex-wrap gap-2 mt-2">
                     <span className={typeBadge(player.source)}>
@@ -125,7 +131,11 @@ export default function PlayerList() {
                 </thead>
                 <tbody>
                   {filteredPlayers.map((player, i) => (
-                    <tr key={player.id} className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                    <tr
+                      key={player.id}
+                      onClick={() => navigate(`/player/${player.id}`)}
+                      className={(i % 2 === 0 ? "bg-gray-50" : "bg-white") + " cursor-pointer hover:bg-green-50 transition-colors"}
+                    >
                       <td className="px-4 py-3 font-semibold text-gray-800 whitespace-nowrap">{player.title}</td>
                       <td className="px-4 py-3">
                         <span className={typeBadge(player.source)}>

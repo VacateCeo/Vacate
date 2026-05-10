@@ -1,8 +1,10 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import PlayerList from "./PlayerList"
 import SignupForm from "./SignupForm"
 import SubmitForm from "./SubmitForm"
+import PlayerProfile from "./PlayerProfile"
 
-export default function App() {
+function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-green-700 text-white py-5 px-4 sm:py-6 sm:px-6 shadow">
@@ -17,5 +19,16 @@ export default function App() {
         <SignupForm />
       </main>
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/player/:id" element={<PlayerProfile />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
