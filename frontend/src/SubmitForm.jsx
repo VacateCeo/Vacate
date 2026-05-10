@@ -101,6 +101,7 @@ export default function SubmitForm() {
         <button type="submit" className="bg-green-700 text-white px-6 py-2 rounded font-semibold hover:bg-green-800 w-full">
           Submit Profile
         </button>
+        <p className="text-gray-400 text-xs italic">All submissions are manually reviewed and verified by Vacate before being listed.</p>
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
     </div>

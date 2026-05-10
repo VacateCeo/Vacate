@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from supabase import create_client
 
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
-NOTIFY_TO = "brandondye01@gmail.com"
+NOTIFY_TO = "brandanan2008@gmail.com"
 NOTIFY_FROM = os.getenv("SENDGRID_FROM_EMAIL", "")
 
 

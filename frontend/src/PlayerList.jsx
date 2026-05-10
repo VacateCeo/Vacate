@@ -62,7 +62,10 @@ export default function PlayerList() {
   return (
     <div>
       <div className="p-4 sm:p-6">
-        <h2 className="text-2xl font-bold mb-3 text-gray-800">Players in the Portal</h2>
+        <div className="flex flex-wrap items-center gap-3 mb-3">
+          <h2 className="text-2xl font-bold text-gray-800">Players in the Portal</h2>
+          <span className="text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded-full px-2 py-0.5">✓ Manually verified by Vacate</span>
+        </div>
 
         {/* Filter bar */}
         <div className="flex flex-wrap gap-2 mb-4 items-center">
