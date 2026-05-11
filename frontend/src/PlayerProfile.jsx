@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { supabase } from "./supabaseClient"
 
+function safeUrl(url) {
+  return url && /^https?:\/\//i.test(url) ? url : null
+}
+
 function parseDescription(description) {
   if (!description) return {}
   const fields = {}
@@ -37,7 +41,7 @@ export default function PlayerProfile() {
     async function fetchPlayer() {
       const { data, error } = await supabase
         .from("players")
-        .select("*")
+        .select("id, title, division, source, description, url, date_added")
         .eq("id", id)
         .eq("approved", true)
         .single()
@@ -126,11 +130,11 @@ export default function PlayerProfile() {
           )}
 
           {/* Hudl link */}
-          {player.url && (
+          {safeUrl(player.url) && (
             <div className="mb-6">
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Highlight Film</h3>
               <a
-                href={player.url}
+                href={safeUrl(player.url)}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 text-green-700 font-semibold hover:underline text-sm"

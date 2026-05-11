@@ -1,3 +1,4 @@
+import html as html_module
 import os
 import sys
 from datetime import datetime, timedelta, timezone
@@ -42,9 +43,9 @@ def send_player_notification(players):
 
     rows = "".join(
         f"<tr style='border-bottom:1px solid #eee'>"
-        f"<td style='padding:8px 12px'>{p.get('title', '')}</td>"
-        f"<td style='padding:8px 12px'>{p.get('division', '')}</td>"
-        f"<td style='padding:8px 12px;color:#555;font-size:13px'>{p.get('description', '')}</td>"
+        f"<td style='padding:8px 12px'>{html_module.escape(p.get('title', ''))}</td>"
+        f"<td style='padding:8px 12px'>{html_module.escape(p.get('division', ''))}</td>"
+        f"<td style='padding:8px 12px;color:#555;font-size:13px'>{html_module.escape(p.get('description', ''))}</td>"
         f"</tr>"
         for p in players
     )

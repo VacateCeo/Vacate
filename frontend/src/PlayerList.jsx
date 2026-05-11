@@ -33,13 +33,13 @@ export default function PlayerList() {
     async function fetchData() {
       const { data: playerData } = await supabase
         .from("players")
-        .select("*")
+        .select("id, title, division, source, description, date_added")
         .eq("approved", true)
         .order("date_added", { ascending: false })
 
       const { data: newsData } = await supabase
         .from("news")
-        .select("*")
+        .select("id, title, division, url, date_added")
         .order("date_added", { ascending: false })
 
       setPlayers(playerData || [])
